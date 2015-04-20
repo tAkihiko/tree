@@ -58,6 +58,7 @@ func tree(rootPath, searchPath string, depth int, parent string, file_display bo
 		fullPath := filepath.Join(searchPath, fi.Name())
 
 		if fi.IsDir() {
+			// 無視ディレクトリチェック
 			ignore := false
 			for _, ignore_dir := range ignore_dirs {
 				if ignore_dir == fi.Name() {
@@ -66,13 +67,16 @@ func tree(rootPath, searchPath string, depth int, parent string, file_display bo
 				}
 			}
 			if !ignore {
+				// ディレクトリ追加
 				dirlist = append(dirlist, fullPath)
 			}
 		} else if file_display {
+			// ファイル追加
 			filelist = append(filelist, fullPath)
 		}
 	}
 
+	// ファイル処理
 	has_dir := ( 0 < len(dirlist) )
 	for _, file := range filelist {
 		rel, err := filepath.Rel(rootPath, file)
@@ -91,6 +95,7 @@ func tree(rootPath, searchPath string, depth int, parent string, file_display bo
 		}
 	}
 	if 0 < len(filelist) {
+		// ファイル名を出力すれば空行を追加
 		if has_dir {
 			fmt.Println(parent + "│" )
 		} else {
@@ -98,6 +103,7 @@ func tree(rootPath, searchPath string, depth int, parent string, file_display bo
 		}
 	}
 
+	// ディレクトリ処理
 	for idx, dir := range dirlist {
 		rel, err := filepath.Rel(rootPath, dir)
 		has_young_brother := ( 0 < len(dirlist[idx+1:]) )

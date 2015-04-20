@@ -22,8 +22,8 @@ func (s *strslice) Set(v string) error {
 
 func main() {
 	var ignore_dirs strslice
-	input_dir := flag.String( "input_dir", ".", "Input directory" )
-	flag.Var( &ignore_dirs,  "ignore_dir", "Ignore directory" )
+	input_dir := flag.String( "top", ".", "tree TOP directory" )
+	flag.Var( &ignore_dirs,  "xd", "eXclude Directory" )
 	flag.Parse()
 
 	fmt.Println(*input_dir)

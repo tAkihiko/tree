@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 )
 
 // Goのflagパッケージで同名の引数を複数受け取る - Qiita
@@ -93,7 +94,7 @@ func tree(rootPath, searchPath string, depth int, parent string, file_display bo
 		if has_dir {
 			fmt.Println(parent + "│" )
 		} else {
-			fmt.Println(parent)
+			fmt.Println(strings.TrimRight(parent, " "))
 		}
 	}
 

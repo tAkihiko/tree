@@ -24,13 +24,14 @@ func main() {
 	var ignore_dirs strslice
 	input_dir := flag.String( "top", ".", "tree TOP directory" )
 	flag.Var( &ignore_dirs,  "xd", "eXclude Directory" )
+	file_display := flag.Bool( "f", false, "Dispaly files" )
 	flag.Parse()
 
 	fmt.Println(*input_dir)
-	tree(*input_dir, *input_dir, 0, "", ignore_dirs)
+	tree(*input_dir, *input_dir, 0, "", *file_display, ignore_dirs)
 }
 
-func tree(rootPath, searchPath string, depth int, parent string, ignore_dirs []string) {
+func tree(rootPath, searchPath string, depth int, parent string, file_display bool, ignore_dirs []string) {
 	fis, err := ioutil.ReadDir(searchPath)
 
 	if err != nil {
@@ -55,7 +56,7 @@ func tree(rootPath, searchPath string, depth int, parent string, ignore_dirs []s
 			if !ignore {
 				dirlist = append(dirlist, fullPath)
 			}
-		} else {
+		} else if file_display {
 			filelist = append(filelist, fullPath)
 		}
 	}
@@ -104,7 +105,7 @@ func tree(rootPath, searchPath string, depth int, parent string, ignore_dirs []s
 			fmt.Println(parent + "└─", base )
 			next += "    "
 		}
-		tree(rootPath, dir, depth + 1, parent + next, ignore_dirs)
+		tree(rootPath, dir, depth + 1, parent + next, file_display, ignore_dirs)
 	}
 
 }

@@ -34,19 +34,21 @@ func main() {
 }
 
 func tree(rootPath, searchPath string, depth int, parent string, file_display bool, ignore_dirs []string, empty_dirs []string) {
+
+	searchName := filepath.Base(searchPath)
+	for _, emd := range empty_dirs {
+		if searchName == emd {
+			// 空ディレクトリ扱いの場合、以降の処理は不要
+			return
+		}
+	}
+
 	fis, err := ioutil.ReadDir(searchPath)
 
 	if err != nil {
 		//fmt.Println( searchPath, " is error" )
 		//panic(err)
 		return
-	}
-
-	searchName := filepath.Base(searchPath)
-	for _, emd := range empty_dirs {
-		if searchName == emd {
-			return
-		}
 	}
 
 	dirlist  := make([]string, 0)

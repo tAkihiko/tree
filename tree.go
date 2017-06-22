@@ -28,18 +28,26 @@ func main() {
 	flag.Var( &ignore_dirs,  "xd", "eXclude Directory" )
 	file_display := flag.Bool( "f", false, "Dispaly files" )
 	flag.Var( &empty_dirs, "emd", "Behavior as empty directory" )
+	max_depth := flag.Int( "max-depth", 0, "Max depth" )
 	flag.Parse()
 
 	fmt.Println(*input_dir)
-	tree(*input_dir, *input_dir, 0, "", *file_display, ignore_dirs, empty_dirs)
+	tree(*input_dir, *input_dir, 0, *max_depth, "", *file_display, ignore_dirs, empty_dirs)
 }
 
-func tree(rootPath, searchPath string, depth int, parent string, file_display bool, ignore_dirs []string, empty_dirs []string) {
+func tree(rootPath, searchPath string, depth, max_depth int, parent string, file_display bool, ignore_dirs []string, empty_dirs []string) {
 
 	searchName := filepath.Base(searchPath)
 	for _, emd := range empty_dirs {
 		if searchName == emd {
 			// 空ディレクトリ扱いの場合、以降の処理は不要
+			return
+		}
+	}
+
+	if 0 < max_depth {
+		if max_depth <= depth {
+			// 指定より深い階層であれば移行の処理は不要
 			return
 		}
 	}
@@ -123,7 +131,7 @@ func tree(rootPath, searchPath string, depth int, parent string, file_display bo
 			fmt.Println(parent + "└─", base )
 			next += "    "
 		}
-		tree(rootPath, dir, depth + 1, parent + next, file_display, ignore_dirs, empty_dirs)
+		tree(rootPath, dir, depth + 1, max_depth, parent + next, file_display, ignore_dirs, empty_dirs)
 	}
 
 }
